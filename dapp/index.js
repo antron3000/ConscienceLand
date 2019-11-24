@@ -3,7 +3,7 @@ let provider;
 let signer;
 let utils;
 //CL = Conscience Land. Conscience Land Address, Conscience Land ABI, Conscience Land Contrct
-let contractAddress = "0x4f5124C2b17DF6045d436f6f31A68Cce50ACa537"
+let contractAddress = "0x97923AB19eC890017d368BBc6b3e2E782E469491"
 let contractABI = [
 	{
 		"inputs": [
@@ -708,6 +708,8 @@ let contractABI = [
 ]
 let contract;
 
+let overrides;
+
 //NFT Functions
 //approve
 //transferFrom
@@ -723,7 +725,6 @@ let contract;
 let admin
 let tokenName;
 let tokenSymbol;
-let tokenDecimals;
 let totalSupply;
 
 //dom objects
@@ -742,46 +743,26 @@ async function initialize(web3) {
   signer = provider.getSigner(accounts[0])
 
   contract = new ethers.Contract(contractAddress,contractABI,signer)
-	resolverContract = new ethers.Contract(resolverContractAddress,resolverABI,signer)
-	registryContract = new ethers.Contract(registryContractAddress,registryABI,signer)
 
-
-	tokenDecimals = await contract.decimals()
+	tokenName = await contract.name()
 	tokenSymbol = await contract.symbol()
 	utils = ethers.utils;
 
+	overrides = {gasLimit:400000}
 	getLabels()
   getTokenDetails()
 }
 
 
 
-async function getLabels(){
-	nameLabel = document.getElementById("nameLabel");
-	symbolLabel = document.getElementById("symbolLabel")
-	supplyLabel = document.getElementById("totalSupplyLabel")
-	contractLink = document.getElementById("contractLink")
-	balanceLabel = document.getElementById("balanceLabel")
-}
 
+async function getLabels() {
+
+}
 
 async function getTokenDetails() {
 
-	nameLabel.innerHTML = "Name: ";
-	symbolLabel.innerHTML = "Symbol: "
-	supplyLabel.innerHTML = "Total Supply: "
-	contractLink.innerHTML = "Contract: "
-	balanceLabel.innerHTML = "Balance: "
-	nameLabel.innerHTML += await contract.name()
-	symbolLabel.innerHTML += await contract.symbol()
 
-	supplyLabel.innerHTML +=  await getTotalSupply()
-	let a = document.createElement('a');
-	a.href =  "https://ropsten.etherscan.io/address/" + contractAddress
-	a.innerHTML = contractAddress
-	contractLink.innerHTML = "Contract: "
-	contractLink.appendChild(a)
-	balanceLabel.innerHTML += await getBalance()
 }
 
 async function getTotalSupply(){

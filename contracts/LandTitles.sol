@@ -63,13 +63,14 @@ contract cLand is ERC721, ERC721Enumerable, ERC721Metadata, ERC721Mintable {
 
     function approveProposal(uint proposalId) public {
         require(admin==msg.sender);
-        transferFrom(address(this),proposals[proposalId].proposer,proposals[proposalId].titleId);
+        transferFrom(admin,proposals[proposalId].proposer,proposals[proposalId].titleId);
     }
 
     function issueTitle(string memory content) public{
         require(msg.sender==admin);
-        mint(address(this),totalSupply());
-        approve(address(this),totalSupply()-1);
+        uint titleId = totalSupply();
+        contents[titleId] = content;
+        mint(admin,titleId);
     }
 
 }
